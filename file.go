@@ -104,7 +104,7 @@ func RemoveFileQ(path string) error {
 	return nil
 }
 
-// RemoveFileW remove file, but from structure File.
+// RemoveFileW removes file, but from structure File.
 // If it couldn't find, then returns error.
 func RemoveFileW(f *File) error {
 	if _, err := os.Stat(f.Path); err != nil {
@@ -116,7 +116,7 @@ func RemoveFileW(f *File) error {
 	return nil
 }
 
-// RemoveFileA remove file, but from structure File.
+// RemoveFileA removes file, but from structure File.
 // Returns content from file.
 // If it couldn't find, then returns empty string slice and, error.
 func RemoveFileA(f *File) ([]string, error) {
