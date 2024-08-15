@@ -117,7 +117,8 @@ func RemoveFileW(f *File) error {
 }
 
 // RemoveFileA remove file, but from structure File.
-// If it couldn't find, then returns error.
+// Returns content from file.
+// If it couldn't find, then returns empty string slice and, error.
 func RemoveFileA(f *File) ([]string, error) {
 	if _, err := os.Stat(f.Path); err != nil {
 		return nil, err
