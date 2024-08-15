@@ -9,7 +9,7 @@ import (
 // File is a structure with information about file.
 // File should be initialized by functions
 // CreateFileQ or CreateFileW.
-// Can be removed by RemoveFileW
+// Can be removed by RemoveFileW or RemoveFileA.
 type File struct {
 	Path    string
 	Content []string
