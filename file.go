@@ -30,6 +30,7 @@ func emptyFileQ(f *File) []string {
 	return lastContent
 }
 
+// isFileExists checks file existence.
 func isFileExists(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -41,6 +42,9 @@ func isFileExists(path string) error {
 // GetFile returns path file. Checks their availability.
 // If file doesn't exist, return empty string and error.
 func GetFile(path string) (string, error) {
+	if err := isFileExists(path); err != nil {
+		return "", err
+	}
 	return path, nil
 }
 
