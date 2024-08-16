@@ -17,7 +17,8 @@ type File struct {
 
 // emptyFileW makes property f empty.
 func emptyFileW(f *File) {
-	f = nil
+	f.Path = ""
+	f.Content = nil
 }
 
 // emptyFileQ makes property
