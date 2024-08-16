@@ -114,6 +114,10 @@ func RemoveFileQ(path string) error {
 		return err
 	}
 
+	if err := isFileExists(path); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -121,6 +125,10 @@ func RemoveFileQ(path string) error {
 // If it couldn't find, then returns error.
 func RemoveFileW(f *File) error {
 	if err := os.Remove(f.Path); err != nil {
+		return err
+	}
+
+	if err := isFileExists(f.Path); err != nil {
 		return err
 	}
 
@@ -135,6 +143,11 @@ func RemoveFileA(f *File) ([]string, error) {
 	if err := os.Remove(f.Path); err != nil {
 		return nil, err
 	}
+
+	if err := isFileExists(f.Path); err != nil {
+		return nil, err
+	}
+
 	content := emptyFileQ(f)
 	return content, nil
 }
