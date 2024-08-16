@@ -41,34 +41,34 @@ func GetFile(path string) (string, error) {
 
 // CreateFileQ creates file to specific path.
 // If file already exists, then returns error.
-func CreateFileQ(path string) error {
+func CreateFileQ(path string) (*File, error) {
 	if _, err := os.Stat(path); err != nil {
-		return err
+		return nil, err
 	}
 
 	file, err := os.Create(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
-	return nil
+	return &File{path, []string{""}}, nil
 }
 
 // CreateFileW creates file to specific path,
 // then writes content to file.
 // Every element of content is new line.
 // If file already exists, then returns error.
-func CreateFileW(path string, content ...string) error {
+func CreateFileW(path string, content ...string) (*File, error) {
 	if _, err := os.Stat(path); err != nil {
-		return err
+		return nil, err
 	}
 
 	file, err := os.Create(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer func(file *os.File) {
@@ -83,11 +83,11 @@ func CreateFileW(path string, content ...string) error {
 
 	for _, v := range content {
 		if _, err := writer.WriteString(v + "\n"); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return &File{path, content}, nil
 }
 
 // RemoveFileQ removes file from specific path.
