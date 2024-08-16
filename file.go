@@ -32,20 +32,12 @@ func emptyFileQ(f *File) []string {
 // GetFile returns path file. Checks their availability.
 // If file doesn't exist, return empty string and error.
 func GetFile(path string) (string, error) {
-	if _, err := os.Stat(path); err != nil {
-		return "", err
-	}
-
 	return path, nil
 }
 
 // CreateFileQ creates file to specific path.
 // If file already exists, then returns error.
 func CreateFileQ(path string) (*File, error) {
-	if _, err := os.Stat(path); err != nil {
-		return nil, err
-	}
-
 	file, err := os.Create(path)
 	if err != nil {
 		return nil, err
@@ -62,10 +54,6 @@ func CreateFileQ(path string) (*File, error) {
 // Every element of content is new line.
 // If file already exists, then returns error.
 func CreateFileW(path string, content ...string) (*File, error) {
-	if _, err := os.Stat(path); err != nil {
-		return nil, err
-	}
-
 	file, err := os.Create(path)
 	if err != nil {
 		return nil, err
@@ -93,10 +81,6 @@ func CreateFileW(path string, content ...string) (*File, error) {
 // RemoveFileQ removes file from specific path.
 // If it couldn't find, then returns error.
 func RemoveFileQ(path string) error {
-	if _, err := os.Stat(path); err != nil {
-		return err
-	}
-
 	if err := os.Remove(path); err != nil {
 		return err
 	}
@@ -107,10 +91,6 @@ func RemoveFileQ(path string) error {
 // RemoveFileW removes file, but from structure File.
 // If it couldn't find, then returns error.
 func RemoveFileW(f *File) error {
-	if _, err := os.Stat(f.Path); err != nil {
-		return err
-	}
-
 	emptyFileW(f)
 
 	return nil
@@ -120,10 +100,6 @@ func RemoveFileW(f *File) error {
 // Returns content from file.
 // If it couldn't find, then returns empty string slice and, error.
 func RemoveFileA(f *File) ([]string, error) {
-	if _, err := os.Stat(f.Path); err != nil {
-		return nil, err
-	}
-
 	content := emptyFileQ(f)
 
 	return content, nil
