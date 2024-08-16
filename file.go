@@ -56,6 +56,14 @@ func CreateFileQ(path string) (*File, error) {
 		return nil, err
 	}
 
+	if err := isFileExists(path); err != nil {
+		err := file.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, err
+	}
+
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
@@ -69,6 +77,14 @@ func CreateFileQ(path string) (*File, error) {
 func CreateFileW(path string, content ...string) (*File, error) {
 	file, err := os.Create(path)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := isFileExists(path); err != nil {
+		err := file.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 
@@ -104,8 +120,11 @@ func RemoveFileQ(path string) error {
 // RemoveFileW removes file, but from structure File.
 // If it couldn't find, then returns error.
 func RemoveFileW(f *File) error {
-	emptyFileW(f)
+	if err := os.Remove(f.Path); err != nil {
+		return err
+	}
 
+	emptyFileW(f)
 	return nil
 }
 
@@ -113,7 +132,9 @@ func RemoveFileW(f *File) error {
 // Returns content from file.
 // If it couldn't find, then returns empty string slice and, error.
 func RemoveFileA(f *File) ([]string, error) {
+	if err := os.Remove(f.Path); err != nil {
+		return nil, err
+	}
 	content := emptyFileQ(f)
-
 	return content, nil
 }
