@@ -31,7 +31,7 @@ func emptyFileQ(f *File) []string {
 }
 
 // isFileExists checks file existence.
-func isFileExists(path string) error {
+func IsFileExists(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func isFileExists(path string) error {
 // GetFile returns path file. Checks their availability.
 // If file doesn't exist, return empty string and error.
 func GetFile(path string) (string, error) {
-	if err := isFileExists(path); err != nil {
+	if err := IsFileExists(path); err != nil {
 		return "", err
 	}
 	return path, nil
@@ -56,7 +56,7 @@ func CreateFileQ(path string) (*File, error) {
 		return nil, err
 	}
 
-	if err := isFileExists(path); err != nil {
+	if err := IsFileExists(path); err != nil {
 		err := file.Close()
 		if err != nil {
 			return nil, err
@@ -80,7 +80,7 @@ func CreateFileW(path string, content ...string) (*File, error) {
 		return nil, err
 	}
 
-	if err := isFileExists(path); err != nil {
+	if err := IsFileExists(path); err != nil {
 		err := file.Close()
 		if err != nil {
 			return nil, err
@@ -114,7 +114,7 @@ func RemoveFileQ(path string) error {
 		return err
 	}
 
-	if err := isFileExists(path); err != nil {
+	if err := IsFileExists(path); err != nil {
 		return err
 	}
 
@@ -128,7 +128,7 @@ func RemoveFileW(f *File) error {
 		return err
 	}
 
-	if err := isFileExists(f.Path); err != nil {
+	if err := IsFileExists(f.Path); err != nil {
 		return err
 	}
 
@@ -144,7 +144,7 @@ func RemoveFileA(f *File) ([]string, error) {
 		return nil, err
 	}
 
-	if err := isFileExists(f.Path); err != nil {
+	if err := IsFileExists(f.Path); err != nil {
 		return nil, err
 	}
 
