@@ -198,6 +198,23 @@ func CreateDirW(path string) (*Dir, error) {
 	return &Dir{Path: path}, nil
 }
 
+// RemoveDir removes directory from specific path.
+func RemoveDir(path string) error {
+	if !strings.HasSuffix(path, "/") {
+
+	}
+
+	if !IsDirExists(path) {
+		return fmt.Errorf("dir doesn't exists: (%v)", path)
+	}
+
+	if err := os.RemoveAll(path); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Output outputs directory with fmt.Printf.
 func (d Dir) Output() {
 	fmt.Printf("Path: %v\nChildren: %v\n", d.Path, d.Children)
