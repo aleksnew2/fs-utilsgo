@@ -104,6 +104,31 @@ func ReadDirW(path string) error {
 	return nil
 }
 
+// ReadDirA works same as ReadDir etc.
+// But it reads directory and puts children
+// to d.Children.
+func ReadDirA(d *Dir) error {
+	err := filepath.Walk(d.Path, func(location string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			d.Children = append(d.Children, "dir: "+location)
+		} else {
+			d.Children = append(d.Children, "file: "+location)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // CreateDir creates directory to specific path with os.Mkdir.
 func CreateDir(path string) error {
 	err := os.Mkdir(path, os.ModePerm)
