@@ -10,7 +10,7 @@ import (
 
 // Dir is structure where contains information about
 // specific directory.
-// Should be initialized by functions ReadDir and ReadDirQ,
+// Should be initialized by functions ReadDirQ,
 // or CreateDirW.
 type Dir struct {
 	Path     string
