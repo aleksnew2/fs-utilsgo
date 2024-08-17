@@ -31,12 +31,12 @@ func emptyFileQ(f *File) []string {
 }
 
 // IsFileExists checks file existence.
-func IsFileExists(path string) error {
+func IsFileExists(path string) bool {
 	_, err := os.Stat(path)
 	if err != nil {
-		return err
+		return false
 	}
-	return nil
+	return true
 }
 
 // GetFile returns path file. Checks their availability.
