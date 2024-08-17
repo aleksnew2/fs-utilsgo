@@ -198,8 +198,8 @@ func CreateDirW(path string) (*Dir, error) {
 	return &Dir{Path: path}, nil
 }
 
-// RemoveDir removes directory from specific path.
-func RemoveDir(path string) error {
+// RemoveDirQ removes a directory from specific path.
+func RemoveDirQ(path string) error {
 	if !strings.HasSuffix(path, "/") {
 		path = path + "/"
 	}
@@ -212,6 +212,21 @@ func RemoveDir(path string) error {
 		return err
 	}
 
+	return nil
+}
+
+// RemoveDirW removes a directory but from the structure Dir.
+// If directory doesn't exist, then returns an error.
+func RemoveDirW(d *Dir) error {
+	if !IsDirExists(d.Path) {
+		return fmt.Errorf("dir %v doesn't exist", d.Path)
+	}
+
+	if err := os.Remove(d.Path); err != nil {
+		return err
+	}
+
+	emptyDirW(d)
 	return nil
 }
 
