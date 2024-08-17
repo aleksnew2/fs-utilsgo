@@ -2,5 +2,5 @@
 .idea/
 
 # Test files (they've been marked as exception because i'm so lazy to delete them lol)
-tests/test*
+tests/test*/
 tests/test*.txt

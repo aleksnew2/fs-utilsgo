@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Dir is structure where contains information about
@@ -29,6 +30,18 @@ func emptyDirQ(d *Dir) []string {
 	d.Path = ""
 	d.Children = nil
 	return lastChildren
+}
+
+func IsDirExists(path string) bool {
+	if strings.HasSuffix(path, "/") {
+		path = path + "/"
+	}
+
+	_, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // ReadDir reads directory and returns string slice.
