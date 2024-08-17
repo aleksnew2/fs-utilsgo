@@ -201,7 +201,7 @@ func CreateDirW(path string) (*Dir, error) {
 // RemoveDir removes directory from specific path.
 func RemoveDir(path string) error {
 	if !strings.HasSuffix(path, "/") {
-
+		path = path + "/"
 	}
 
 	if !IsDirExists(path) {
