@@ -230,6 +230,22 @@ func RemoveDirW(d *Dir) error {
 	return nil
 }
 
+// RemoveDirA removes a directory but from the structure Dir.
+// Returns directory's children.
+// If directory doesn't exist, then returns an error.
+func RemoveDirA(d *Dir) ([]string, error) {
+	if !IsDirExists(d.Path) {
+		return nil, fmt.Errorf("dir %v doesn't exist", d.Path)
+	}
+
+	if err := os.Remove(d.Path); err != nil {
+		return nil, err
+	}
+
+	children := emptyDirQ(d)
+	return children, nil
+}
+
 // Output outputs directory with fmt.Printf.
 func (d Dir) Output() {
 	fmt.Printf("Path: %v\nChildren: %v\n", d.Path, d.Children)
