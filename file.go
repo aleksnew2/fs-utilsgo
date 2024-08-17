@@ -1,8 +1,8 @@
-// Package fs_utils provides function for creating, removing files etc.
 package fs_utils
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 
@@ -33,58 +33,48 @@ func emptyFileQ(f *File) []string {
 // IsFileExists checks file existence.
 func IsFileExists(path string) bool {
 	_, err := os.Stat(path)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // GetFile returns path file. Checks their availability.
 // If file doesn't exist, return empty string and error.
 func GetFile(path string) (string, error) {
-	if err := IsFileExists(path); err != nil {
-		return "", err
+	if !IsFileExists(path) {
+		return "", fmt.Errorf("%v doesn't exist", path)
 	}
 	return path, nil
 }
 
-// CreateFileQ creates file to specific path.
-// If file already exists, then returns error.
+// CreateFileQ creates a file at a specific path.
+// If the file already exists, then returns an error.
 func CreateFileQ(path string) (*File, error) {
-	file, err := os.Create(path)
-	if err != nil {
-		return nil, err
+	if IsFileExists(path) {
+		return nil, fmt.Errorf("file %v already exists", path)
 	}
 
-	if err := IsFileExists(path); err != nil {
-		err := file.Close()
-		if err != nil {
-			return nil, err
-		}
+	file, err := os.Create(path)
+	if err != nil {
 		return nil, err
 	}
 
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
+
 	return &File{path, []string{""}}, nil
 }
 
-// CreateFileW creates file to specific path,
-// then writes content to file.
-// Every element of content is new line.
-// If file already exists, then returns error.
+// CreateFileW creates a file at a specific path,
+// then writes content to the file.
+// Every element of content is a new line.
+// If the file already exists, then returns an error.
 func CreateFileW(path string, content ...string) (*File, error) {
-	file, err := os.Create(path)
-	if err != nil {
-		return nil, err
+	if IsFileExists(path) {
+		return nil, fmt.Errorf("file %v already exists", path)
 	}
 
-	if err := IsFileExists(path); err != nil {
-		err := file.Close()
-		if err != nil {
-			return nil, err
-		}
+	file, err := os.Create(path)
+	if err != nil {
 		return nil, err
 	}
 
@@ -93,7 +83,6 @@ func CreateFileW(path string, content ...string) (*File, error) {
 	}(file)
 
 	writer := bufio.NewWriter(file)
-
 	defer func(writer *bufio.Writer) {
 		_ = writer.Flush()
 	}(writer)
@@ -107,28 +96,28 @@ func CreateFileW(path string, content ...string) (*File, error) {
 	return &File{path, content}, nil
 }
 
-// RemoveFileQ removes file from specific path.
-// If it couldn't find, then returns error.
+// RemoveFileQ removes a file at a specific path.
+// If it couldn't find the file, then returns an error.
 func RemoveFileQ(path string) error {
-	if err := os.Remove(path); err != nil {
-		return err
+	if !IsFileExists(path) {
+		return fmt.Errorf("file %v does not exist", path)
 	}
 
-	if err := IsFileExists(path); err != nil {
+	if err := os.Remove(path); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-// RemoveFileW removes file, but from structure File.
-// If it couldn't find, then returns error.
+// RemoveFileW removes a file from the structure File.
+// If it couldn't find the file, then returns an error.
 func RemoveFileW(f *File) error {
-	if err := os.Remove(f.Path); err != nil {
-		return err
+	if !IsFileExists(f.Path) {
+		return fmt.Errorf("file %v does not exist", f.Path)
 	}
 
-	if err := IsFileExists(f.Path); err != nil {
+	if err := os.Remove(f.Path); err != nil {
 		return err
 	}
 
@@ -136,15 +125,15 @@ func RemoveFileW(f *File) error {
 	return nil
 }
 
-// RemoveFileA removes file, but from structure File.
-// Returns content from file.
-// If it couldn't find, then returns empty string slice and, error.
+// RemoveFileA removes a file from the structure File.
+// Returns the content from the file.
+// If it couldn't find the file, then returns an empty string slice and an error.
 func RemoveFileA(f *File) ([]string, error) {
-	if err := os.Remove(f.Path); err != nil {
-		return nil, err
+	if !IsFileExists(f.Path) {
+		return nil, fmt.Errorf("file %v does not exist", f.Path)
 	}
 
-	if err := IsFileExists(f.Path); err != nil {
+	if err := os.Remove(f.Path); err != nil {
 		return nil, err
 	}
 
