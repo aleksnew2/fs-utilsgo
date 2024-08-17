@@ -107,6 +107,6 @@ func CreateDirQ(path string) error {
 }
 
 // Output outputs directory with fmt.Printf.
-func (d Dir) Output(path string) {
+func (d Dir) Output() {
 	fmt.Printf("Path: %v\nChildren: %v\n", d.Path, d.Children)
 }
