@@ -48,10 +48,28 @@ func IsDirExists(path string) bool {
 // If directory doesn't exist, then returns empty string and error.
 func GetDir(path string) (string, error) {
 	if !IsDirExists(path) {
-		return "", fmt.Errorf("dir doesn't exist")
+		return "", fmt.Errorf("dir doesn't exist (%v)", path)
 	}
 
 	return path, nil
+}
+
+// GetDirQ returns directory from specific path.
+// It takes path from property d, who inherited by structure Dir.
+// Then, reads directory and put children to d.Children.
+// If directory doesn't exist, then returns empty d object and error.
+func GetDirQ(d *Dir) (*Dir, error) {
+	if !IsDirExists(d.Path) {
+		return nil, fmt.Errorf("dir doesn't exist (%v)", d.Path)
+	}
+
+	fsElements, err := ReadDir(d.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	copy(fsElements, d.Children)
+	return &Dir{Path: d.Path, Children: fsElements}, nil
 }
 
 // ReadDir reads directory and returns string slice.
