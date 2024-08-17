@@ -1,6 +1,7 @@
 package fs_utils
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -62,6 +63,29 @@ func ReadDirQ(path string) (*Dir, error) {
 	}
 
 	return &Dir{path, children}, nil
+}
+
+// ReadDirW reads directory and outputs content with fmt.Printf.
+func ReadDirW(path string) error {
+	err := filepath.Walk(path, func(location string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			fmt.Printf("dir: %v\n", location)
+		} else {
+			fmt.Printf("file: %v\n", location)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // CreateDir creates directory to specific path with os.Mkdir.
