@@ -9,7 +9,8 @@ import (
 
 // Dir is structure where contains information about
 // specific directory.
-// Should be initialized by functions ReadDir and ReadDirQ.
+// Should be initialized by functions ReadDir and ReadDirQ,
+// or CreateDirW.
 type Dir struct {
 	Path     string
 	Children []string
@@ -119,6 +120,16 @@ func CreateDirQ(path string) error {
 		return err
 	}
 	return nil
+}
+
+// CreateDirW creates directory to specific path with os.Mkdir.
+// Then returns Dir object.
+func CreateDirW(path string) (*Dir, error) {
+	err := os.Mkdir(path, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+	return &Dir{Path: path}, nil
 }
 
 // Output outputs directory with fmt.Printf.
