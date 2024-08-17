@@ -30,7 +30,7 @@ func emptyFileQ(f *File) []string {
 	return lastContent
 }
 
-// isFileExists checks file existence.
+// IsFileExists checks file existence.
 func IsFileExists(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
