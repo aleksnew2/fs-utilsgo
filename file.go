@@ -21,7 +21,7 @@ func emptyFileW(f *File) {
 	f.Content = nil
 }
 
-// emptyFileQ makes property
+// emptyFileQ makes property f empty
 // and returns content of file.
 func emptyFileQ(f *File) []string {
 	lastContent := f.Content

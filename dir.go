@@ -15,6 +15,21 @@ type Dir struct {
 	Children []string
 }
 
+// emptyDirW makes property d empty.
+func emptyDirW(d *Dir) {
+	d.Path = ""
+	d.Children = nil
+}
+
+// emptyDirQ makes property d empty
+// and returns directory's children.
+func emptyDirQ(d *Dir) []string {
+	lastChildren := d.Children
+	d.Path = ""
+	d.Children = nil
+	return lastChildren
+}
+
 // ReadDir reads directory and returns string slice.
 // If there's error, returns nil and error.
 func ReadDir(path string) ([]string, error) {
