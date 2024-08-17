@@ -68,7 +68,7 @@ func GetDirQ(d *Dir) (*Dir, error) {
 		return nil, err
 	}
 
-	copy(fsElements, d.Children)
+	copy(d.Children, fsElements)
 	return &Dir{Path: d.Path, Children: fsElements}, nil
 }
 
