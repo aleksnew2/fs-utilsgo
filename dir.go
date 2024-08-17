@@ -44,6 +44,16 @@ func IsDirExists(path string) bool {
 	return true
 }
 
+// GetDir returns directory from specific path.
+// If directory doesn't exist, then returns empty string and error.
+func GetDir(path string) (string, error) {
+	if !IsDirExists(path) {
+		return "", fmt.Errorf("dir doesn't exist")
+	}
+
+	return path, nil
+}
+
 // ReadDir reads directory and returns string slice.
 // If there's error, returns nil and error.
 func ReadDir(path string) ([]string, error) {
