@@ -170,6 +170,35 @@ func ReadDirA(d *Dir) error {
 	return nil
 }
 
+// ReadDirD scans directory from specific path and outputs process.
+// Generates random ID to identify an operation.
+// Returns ID.
+// If there's an error, then function panics.
+func ReadDirD(path string) string {
+	id := generateID(16)
+	fmt.Printf("%v: starting scanning directory... (path: %v)\n", id, path)
+
+	err := filepath.Walk(path, func(location string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			fmt.Printf("found directory: %v\n", location)
+		} else {
+			fmt.Printf("found file: %v\n", location)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return id
+}
+
 // CreateDir creates directory to specific path with os.Mkdir.
 func CreateDir(path string) error {
 	err := os.Mkdir(path, os.ModePerm)
