@@ -173,7 +173,7 @@ func ReadDirA(d *Dir) error {
 // ReadDirD scans directory from specific path and outputs process.
 // Generates random ID to identify an operation.
 // Returns ID.
-// If there's an error, then function panics.
+// If there's an error, then functions outputs error instead of panic.
 func ReadDirD(path string) string {
 	id := generateID(16)
 	fmt.Printf("%v: starting scanning directory... (path: %v)\n", id, path)
@@ -193,7 +193,7 @@ func ReadDirD(path string) string {
 	})
 
 	if err != nil {
-		panic(err)
+		fmt.Printf("error while scanning: %v", err)
 	}
 
 	return id
