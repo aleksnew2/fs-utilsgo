@@ -33,8 +33,8 @@ func emptyDirQ(d *Dir) []string {
 }
 
 func IsDirExists(path string) bool {
-	if strings.HasSuffix(path, "/") {
-		path = path + "/"
+	if strings.HasSuffix(path, "\\") {
+		path = path + "\\"
 	}
 
 	_, err := os.Stat(path)
