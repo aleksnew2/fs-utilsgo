@@ -73,6 +73,12 @@ func GetDirQ(d *Dir) (*Dir, error) {
 }
 
 // ReadDir reads directory and returns string slice.
+// Found elements append to slice in this format:
+//
+// Directory format: dtest.txt
+//
+// File format: ftest.txt
+//
 // If there's error, returns nil and error.
 func ReadDir(path string) ([]string, error) {
 	var slice []string
@@ -82,9 +88,9 @@ func ReadDir(path string) ([]string, error) {
 		}
 
 		if info.IsDir() {
-			slice = append(slice, "dir: "+location)
+			slice = append(slice, "d"+location)
 		} else {
-			slice = append(slice, "file"+location)
+			slice = append(slice, "f"+location)
 		}
 
 		return nil
