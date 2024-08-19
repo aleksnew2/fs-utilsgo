@@ -171,3 +171,27 @@ func OutputFileContent(path string) {
 		}
 	}
 }
+
+// GetFileContent returns slice of content from specific file.
+// Every element of slice marked as one line.
+// If there's an error, function returns nil and error.
+func GetFileContent(path string) ([]string, error) {
+	var lines []string
+
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, nil
+}
