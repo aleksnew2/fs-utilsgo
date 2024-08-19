@@ -15,6 +15,10 @@ type File struct {
 	Content []string
 }
 
+// FileLines contains lines.
+// Should be initialized by GetFileContent.
+type FileLines []string
+
 // emptyFileW makes property f empty.
 func emptyFileW(f *File) {
 	f.Path = ""
