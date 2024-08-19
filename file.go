@@ -140,3 +140,34 @@ func RemoveFileA(f *File) ([]string, error) {
 	content := emptyFileQ(f)
 	return content, nil
 }
+
+// OutputFileContent outputs file content by the line.
+// Example:
+//
+// 1. HI!
+//
+// 2. BYE!
+//
+// If there's error, function panics.
+func OutputFileContent(path string) {
+	file, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file)
+
+	scanner := bufio.NewScanner(file)
+
+	for i := 0; i < len(scanner.Text()); i++ {
+		for scanner.Scan() {
+			i++
+			fmt.Printf("%v. %v", i, scanner.Text())
+		}
+	}
+}
