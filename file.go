@@ -15,7 +15,7 @@ type File struct {
 	Content []string
 }
 
-// FileLines contains lines.
+// FileLines contains lines of specific file.
 // Should be initialized by GetFileContent.
 type FileLines []string
 
