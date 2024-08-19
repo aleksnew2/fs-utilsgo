@@ -199,3 +199,18 @@ func GetFileContent(path string) ([]string, error) {
 
 	return lines, nil
 }
+
+// Output outputs lines.
+// If there aren't lines, outputs error.
+func (fl FileLines) Output() {
+	if len(fl) == 0 {
+		fmt.Printf("FileLines.Output: there aren't lines")
+	}
+
+	for i := 0; i < len(fl); {
+		for _, line := range fl {
+			i++
+			fmt.Printf("%v. %v", i, line)
+		}
+	}
+}
