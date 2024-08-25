@@ -12,7 +12,7 @@ import (
 // Can be removed by RemoveFileW or RemoveFileA.
 type File struct {
 	Path    string
-	Content []string
+	Content FileLines
 }
 
 // FileLines contains lines of specific file.
