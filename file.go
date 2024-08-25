@@ -179,8 +179,8 @@ func OutputFileContent(path string) {
 // GetFileContent returns slice of content from specific file.
 // Every element of slice marked as one line.
 // If there's an error, function returns nil and error.
-func GetFileContent(path string) ([]string, error) {
-	var lines []string
+func GetFileContent(path string) (FileLines, error) {
+	var lines FileLines
 
 	file, err := os.Open(path)
 	if err != nil {
