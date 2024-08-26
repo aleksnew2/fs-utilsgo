@@ -75,7 +75,7 @@ func GetDirQ(d *Dir) (*Dir, error) {
 // ReadDir reads directory and returns string slice.
 // Found elements append to slice in this format:
 //
-// Directory format: dtest.txt
+// Directory format: dtest
 //
 // File format: ftest.txt
 //
@@ -104,6 +104,12 @@ func ReadDir(path string) ([]string, error) {
 }
 
 // ReadDirQ reads directory and returns Dir object.
+// Found elements append to slice in this format:
+//
+// Directory format: dtest
+//
+// File format: ftest.txt
+//
 // If there's error, returns nil and error.
 func ReadDirQ(path string) (*Dir, error) {
 	var children []string
@@ -113,9 +119,9 @@ func ReadDirQ(path string) (*Dir, error) {
 		}
 
 		if info.IsDir() {
-			children = append(children, "dir: "+location)
+			children = append(children, "d"+location)
 		} else {
-			children = append(children, "file: "+location)
+			children = append(children, "f"+location)
 		}
 
 		return nil
@@ -136,9 +142,9 @@ func ReadDirW(path string) error {
 		}
 
 		if info.IsDir() {
-			fmt.Printf("dir: %v\n", location)
+			fmt.Printf("found dir: %v\n", location)
 		} else {
-			fmt.Printf("file: %v\n", location)
+			fmt.Printf("found file: %v\n", location)
 		}
 
 		return nil
@@ -154,6 +160,11 @@ func ReadDirW(path string) error {
 // ReadDirA works same as ReadDir etc.
 // But it reads directory and puts children
 // to d.Children.
+// Found elements append to slice in this format:
+//
+// Directory format: dtest
+//
+// File format: ftest.txt
 func ReadDirA(d *Dir) error {
 	err := filepath.Walk(d.Path, func(location string, info fs.FileInfo, err error) error {
 		if err != nil {
@@ -161,9 +172,9 @@ func ReadDirA(d *Dir) error {
 		}
 
 		if info.IsDir() {
-			d.Children = append(d.Children, "dir: "+location)
+			d.Children = append(d.Children, "d"+location)
 		} else {
-			d.Children = append(d.Children, "file: "+location)
+			d.Children = append(d.Children, "f"+location)
 		}
 
 		return nil
