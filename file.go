@@ -200,6 +200,34 @@ func GetFileContent(path string) (FileLines, error) {
 	return lines, nil
 }
 
+// WriteContent writes content to file.
+// If it couldn't, returns error.\
+func WriteContent(path string, content ...string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+
+	writer := bufio.NewWriter(file)
+
+	defer func(writer *bufio.Writer) {
+		_ = writer.Flush()
+	}(writer)
+
+	for _, line := range content {
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // Output outputs lines.
 // If there aren't lines, outputs error.
 func (fl FileLines) Output() {
