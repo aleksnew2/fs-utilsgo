@@ -27,7 +27,7 @@ func emptyFileW(f *File) {
 
 // emptyFileQ makes property f empty
 // and returns content of file.
-func emptyFileQ(f *File) []string {
+func emptyFileQ(f *File) FileLines {
 	lastContent := f.Content
 	f.Path = ""
 	f.Content = nil
@@ -72,7 +72,7 @@ func CreateFileQ(path string) (*File, error) {
 // then writes content to the file.
 // Every element of content is a new line.
 // If the file already exists, then returns an error.
-func CreateFileW(path string, content ...string) (*File, error) {
+func CreateFileW(path string, content FileLines) (*File, error) {
 	if IsFileExists(path) {
 		return nil, fmt.Errorf("file %v already exists", path)
 	}
@@ -104,7 +104,7 @@ func CreateFileW(path string, content ...string) (*File, error) {
 // then writes content to the file.
 // Every element of content is a new line.
 // If the file already exists, then returns an error.
-func CreateFileA(path string, content ...string) error {
+func CreateFileA(path string, content FileLines) error {
 	if IsFileExists(path) {
 		return fmt.Errorf("file %v already exists", path)
 	}
@@ -184,7 +184,7 @@ func RemoveFileW(f *File) error {
 // RemoveFileA removes a file from the structure File.
 // Returns the content from the file.
 // If it couldn't find the file, then returns an empty string slice and an error.
-func RemoveFileA(f *File) ([]string, error) {
+func RemoveFileA(f *File) (FileLines, error) {
 	if !IsFileExists(f.Path) {
 		return nil, fmt.Errorf("file %v does not exist", f.Path)
 	}
@@ -253,8 +253,8 @@ func GetFileContent(path string) (FileLines, error) {
 }
 
 // WriteContent writes content to file.
-// If it couldn't, returns error.\
-func WriteContent(path string, content ...string) error {
+// If it couldn't, returns error.
+func WriteContent(path string, content FileLines) error {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
@@ -285,6 +285,7 @@ func WriteContent(path string, content ...string) error {
 func (fl FileLines) Output() {
 	if len(fl) == 0 {
 		fmt.Printf("FileLines.Output: there aren't lines")
+		return
 	}
 
 	for i := 0; i < len(fl); {
