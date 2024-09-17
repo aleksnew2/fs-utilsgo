@@ -296,3 +296,55 @@ func RemoveDirA(d *Dir) ([]string, error) {
 func (d Dir) Output() {
 	fmt.Printf("Path: %v\nChildren: %v\n", d.Path, d.Children)
 }
+
+// MoveDir moves a directory from sourcePath to destinationPath.
+// If the destination directory already exists, returns an error.
+func MoveDir(sourcePath, destinationPath string) error {
+	if IsDirExists(destinationPath) {
+		return fmt.Errorf("directory %v already exists", destinationPath)
+	}
+	return os.Rename(sourcePath, destinationPath)
+}
+
+// ListFilesInDir lists all files in the specified directory.
+// Returns a slice of file names and an error if any occurs.
+func ListFilesInDir(path string) ([]string, error) {
+	if !IsDirExists(path) {
+		return nil, fmt.Errorf("directory %v does not exist", path)
+	}
+
+	var files []string
+	err := filepath.Walk(path, func(location string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			files = append(files, location)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
+// RemoveEmptyDir removes an empty directory at the specified path.
+// Returns an error if the directory is not empty or does not exist.
+func RemoveEmptyDir(path string) error {
+	if !IsDirExists(path) {
+		return fmt.Errorf("directory %v does not exist", path)
+	}
+
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return err
+	}
+	if len(entries) > 0 {
+		return fmt.Errorf("directory %v is not empty", path)
+	}
+
+	return os.Remove(path)
+}
