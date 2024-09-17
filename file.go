@@ -354,3 +354,4 @@ func AppendToFile(path string, content FileLines) error {
 
 	return nil
 }
+
