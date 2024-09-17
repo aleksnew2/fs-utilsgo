@@ -133,6 +133,8 @@ func CreateFileA(path string, content ...string) error {
 	return nil
 }
 
+// CreateFileR creates a file at a specific path.
+// If the file already exists, then returns an error.
 func CreateFileR(path string) error {
 	if IsFileExists(path) {
 		return fmt.Errorf("file %v already exists", path)
