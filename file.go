@@ -3,6 +3,7 @@ package fs_utils
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -294,4 +295,62 @@ func (fl FileLines) Output() {
 			fmt.Printf("%v. %v", i, line)
 		}
 	}
+}
+
+// RenameFile renames a file from oldPath to newPath.
+// If the newPath already exists, returns an error.
+func RenameFile(oldPath, newPath string) error {
+	if IsFileExists(newPath) {
+		return fmt.Errorf("file %v already exists", newPath)
+	}
+	return os.Rename(oldPath, newPath)
+}
+
+// CopyFile copies a file from source to destination.
+// If the destination file already exists, returns an error.
+func CopyFile(source, destination string) error {
+	if IsFileExists(destination) {
+		return fmt.Errorf("file %v already exists", destination)
+	}
+
+	input, err := os.Open(source)
+	if err != nil {
+		return err
+	}
+	defer input.Close()
+
+	output, err := os.Create(destination)
+	if err != nil {
+		return err
+	}
+	defer output.Close()
+
+	_, err = io.Copy(output, input)
+	return err
+}
+
+// AppendToFile appends content to an existing file.
+// If the file doesn't exist, returns an error.
+func AppendToFile(path string, content FileLines) error {
+	if !IsFileExists(path) {
+		return fmt.Errorf("file %v does not exist", path)
+	}
+
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	defer writer.Flush()
+
+	for _, line := range content {
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
