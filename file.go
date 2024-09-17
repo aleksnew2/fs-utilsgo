@@ -100,6 +100,56 @@ func CreateFileW(path string, content ...string) (*File, error) {
 	return &File{path, content}, nil
 }
 
+// CreateFileA creates a file at a specific path,
+// then writes content to the file.
+// Every element of content is a new line.
+// If the file already exists, then returns an error.
+func CreateFileA(path string, content ...string) error {
+	if IsFileExists(path) {
+		return fmt.Errorf("file %v already exists", path)
+	}
+
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+
+	writer := bufio.NewWriter(file)
+	defer func(writer *bufio.Writer) {
+		_ = writer.Flush()
+	}(writer)
+
+	for _, line := range content {
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func CreateFileR(path string) error {
+	if IsFileExists(path) {
+		return fmt.Errorf("file %v already exists", path)
+	}
+
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+
+	return nil
+}
+
 // RemoveFileQ removes a file at a specific path.
 // If it couldn't find the file, then returns an error.
 func RemoveFileQ(path string) error {
