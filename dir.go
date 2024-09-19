@@ -38,10 +38,7 @@ func IsDirExists(path string) bool {
 	}
 
 	_, err := os.Stat(path)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // GetDir returns directory from specific path.
@@ -68,8 +65,8 @@ func GetDirQ(d *Dir) (*Dir, error) {
 		return nil, err
 	}
 
-	copy(d.Children, fsElements)
-	return &Dir{Path: d.Path, Children: fsElements}, nil
+	d.Children = fsElements
+	return d, nil
 }
 
 // ReadDir reads directory and returns string slice.
