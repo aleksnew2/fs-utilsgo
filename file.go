@@ -221,11 +221,10 @@ func OutputFileContent(path string) {
 
 	scanner := bufio.NewScanner(file)
 
-	for i := 0; i < len(scanner.Text()); i++ {
-		for scanner.Scan() {
-			i++
-			fmt.Printf("%v. %v", i, scanner.Text())
-		}
+	i := 1
+	for scanner.Scan() {
+		fmt.Printf("%v. %v\n", i, scanner.Text())
+		i++
 	}
 }
 
@@ -285,15 +284,12 @@ func WriteContent(path string, content FileLines) error {
 // If there aren't lines, outputs error.
 func (fl FileLines) Output() {
 	if len(fl) == 0 {
-		fmt.Printf("FileLines.Output: there aren't lines")
+		fmt.Printf("FileLines.Output: there aren't lines\n")
 		return
 	}
 
-	for i := 0; i < len(fl); {
-		for _, line := range fl {
-			i++
-			fmt.Printf("%v. %v", i, line)
-		}
+	for i := 0; i < len(fl); i++ {
+		fmt.Printf("%v. %v\n", i+1, fl[i])
 	}
 }
 
@@ -354,4 +350,3 @@ func AppendToFile(path string, content FileLines) error {
 
 	return nil
 }
-
