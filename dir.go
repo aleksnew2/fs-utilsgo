@@ -348,3 +348,117 @@ func RemoveEmptyDir(path string) error {
 
 	return os.Remove(path)
 }
+
+// ScanDirQ scans directory and returns slice of files and directories.
+// Format:
+//
+// f_Title is a file
+//
+// d_Title is a directory
+func ScanDirQ() []string {
+	var files []string
+	err := filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			files = append(files, "d_"+path)
+		} else {
+			files = append(files, "f_"+path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil
+	}
+
+	return files
+}
+
+// ScanDirW scans directory and outputs files and directories.
+// Format:
+//
+// f_Title is a file
+//
+// d_Title is a directory
+func ScanDirW() error {
+	err := filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			fmt.Println("d_" + path)
+		} else {
+			fmt.Println("f_" + path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ScanDirA scans directory and appends files and directories to d.Children.
+// Format:
+//
+// f_Title is a file
+//
+// d_Title is a directory
+func ScanDirA(d *Dir) error {
+	err := filepath.Walk(d.Path, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			d.Children = append(d.Children, "d_"+path)
+		} else {
+			d.Children = append(d.Children, "f_"+path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ScanDirD scans directory and outputs files and directories with a timestamp.
+// Format:
+//
+// f_Title is a file
+//
+// d_Title is a directory
+func ScanDirD() error {
+	err := filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		timestamp := info.ModTime().Format("2006-01-02 15:04:05")
+		if info.IsDir() {
+			fmt.Printf("d_%s - %s\n", path, timestamp)
+		} else {
+			fmt.Printf("f_%s - %s\n", path, timestamp)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
